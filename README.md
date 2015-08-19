@@ -1,53 +1,78 @@
 Open Exoplanet Catalogue Tables
 ==============
 
-This repository contains simple ASCII tables that are generated from the [Open Exoplanet Catalogue](https://github.com/hannorein/open_exoplanet_catalogue). The Open Exoplanet Catalogue is a database of all discovered extra-solar planets. New planets are usually added within 24 hours of their announcement.
+This is an attempt to convert the OEC into a relative SQL DATABASE.
 
-A few words of caution: Many planetary systems are part of binary star systems. The architecture of these systems is correctly represented in the original XML files of the Open Exoplanet Catalogue. In fact, it is to my knowlegde the only catalogue that can do that. However, you might prefer to work with a simpler comma or tab separated table instead of the hierarchical XML file format. During the convertion process, some information is inevitably lost. Most importantly, the architecture of the star system. One cannot easily represent an arbitrary binary/tripple/quadruple system in a simple table. Additionally, if planets have multiple identifiers only the first identifier is outputted. Using the original XML file format and git, you can use the `git blame` funtionality to find references to scientific publications for every numeric value in the database. This functionality is also lost in the convertion process.
+The main repository: https://github.com/ziphead/Exoscanner
 
-You are encouraged to use the original Open Exoplanet Catalogue instead of these files here.
+Stable versions will be pushed here.
 
-The database is licensed under an MIT license (see below), which basically says you can do everything with it. If you use it for a scientific publication, please include a reference to the Open Exoplanet Catalogue on [github](https://github.com/hannorein/open_exoplanet_catalogue) or to [this arXiv paper](http://arxiv.org/abs/1211.7121).  
+Everyone is welcomed to help me with the development.
 
-The catalogue is maintained by Hanno Rein, Institute for Advanced Study, Princeton. However, I hope this will become a community project. Please send corrections and additions via pull request or [email](mailto:exoplanet@hanno-rein.de). If you have questions or comments about git or the database, please do not hesitate to contact me directly.
+# Exoscanner
 
-Column description
---------------
- 
-1. Primary identifier of planet
-2. Binary flag [0=no known stellar binary companion; 1=P-type binary (circumbinary); 2=S-type binary; 3=orphan planet (no star)]
-3. Planetary mass [Jupiter masses]
-4. Radius [Jupiter radii]
-5. Period [days]
-6. Semi-major axis [Astronomical Units]
-7. Eccentricity
-8. Periastron [degree]
-9. Longitude [degree]
-10. Ascending node [degree]
-11. Inclination [degree]
-12. Surface or equilibrium temperature [K]
-13. Age [Gyr]
-14. Discovery method
-15. Discovery year [yyyy]
-16. Last updated [yy/mm/dd]
-17. Right ascension [hh mm ss]
-18. Declination [+/-dd mm ss]
-19. Distance from Sun [parsec]
-20. Host star mass [Solar masses]
-21. Host star radius [Solar radii]
-22. Host star metallicity [log relative to solar]
-23. Host star temperature [K]
-24. Host star age [Gyr]
+   Exoscanner is a python program, which creates mysql tables in your database and fills them with data from the Open Exoplanet Catalogue. https://github.com/OpenExoplanetCatalogue/open_exoplanet_catalogue. It preserves relations between bodies in systems by separating system, star , binary, planet data into 4 tables related with foreign keys.
+   Exoscanner is not a replacement for The OEC.  Maybe another instance or a tool to make your own exoplanet SQL database. File "models.py" contains all the tags for each model and you can freely remove some of them or add yours then built your own database with data you need for specific calculations or for a personal web page.
+   
+
+![alt tag](http://i58.tinypic.com/flwms.png)
+
+Used python modules:
+  - lxml
+  - peewee
 
 
 
-License
---------------
-Copyright (C) 2013 Hanno Rein
+### Version
+0.1.0 (Alpha)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this database and associated scripts (the "Database"), to deal in the Database without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Database, and to permit persons to whom the Database is furnished to do so, subject to the following conditions:
+### Issues
+- separation tag value overwrites in database (in progress)
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Database.
-A reference to the Database shall be included in all scientific publications that make use of the Database.
 
-THE DATABASE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATABASE OR THE USE OR OTHER DEALINGS IN THE DATABASE.
+### Installation
+
+Tested with Ubuntu 14.4
+
+Before launching this program please make sure you have done the following preparations:
+
+1) Working mysql server on your localhost or on a distant server.
+
+2) Exoscanner cooks tables only. You'll need to create a new database or use an existing one. Give mysql user  the priviliges   to insert, delete and  alter table. 
+
+3) Exoscanner is a python 2.7 code. It uses two  libraries which are not icluded in the standart python package. You have to install them manualy with pip.
+
+```sh
+$ sudo apt-get install python-pip 
+```
+
+```sh
+$ pip install peewee
+$ pip install lxml
+
+```
+4) Download Exoscanner folder then download and extract open exoplanet catalogue (https://github.com/OpenExoplanetCatalogue/oec_gzip/raw/master/systems.xml.gz) 
+
+5) Open models.py and type your mysql database name, username and password
+
+6) launch  exo.py
+
+```sh
+$ python exo.py
+
+```
+7) Check out
+
+```sh
+$ python control.py
+
+```
+
+### Development
+
+- Control module (in progress)
+- Update pattern to keep db up-to-date.
+
+**Contacts**
+
+- [Yury Milto]  ymilto@gmail.com
